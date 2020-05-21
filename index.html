@@ -1,106 +1,65 @@
-<html>
-<head>
-<title>
-</title>
-<script>
-var supportMsg = document.getElementById('msg');
-if ('speechSynthesis' in window) {
- supportMsg.innerHTML = '<span class="ok">&#x2611;
-</span> Your browser <strong>supports</strong> speech
-synthesis.';
-} else {
- supportMsg.innerHTML = '<span class="notok">&#x2612;</
-span> Sorry your browser <strong>does not support</
-strong> speech synthesis.';
- supportMsg.classList.add('not-supported');
-}
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>calculator</title>
+    <style>
+      html, body { padding: 0; margin : 0; overflow:hidden; height: 100% }
+      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+      canvas { border: 0px none; background-color: white; height:100%; width:100%;  }
+      /* The contenteditable property is set to true for the canvas in order to support
+         clipboard events. Hide the resulting focus frame and set the cursor back to
+         the default cursor. */
+      canvas { outline: 0px solid transparent; caret-color: transparent; cursor:default }
+    </style>
+  </head>
+  <body onload="init()">
+    <figure style="overflow:visible;" id="qtspinner">
+      <center style="margin-top:1.5em; line-height:150%">
+        <img src="qtlogo.svg" width="320" height="200" style="display:block"></img>
+        <strong>Qt for WebAssembly: calculator</strong>
+        <div id="qtstatus"></div>
+        <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
+      </center>
+    </figure>
+    <canvas id="qtcanvas" oncontextmenu="event.preventDefault()" contenteditable="true"></canvas>
 
-var button = document.getElementById('speak');
-var speechMsgInput = document.getElementById('speech-msg');
-var voiceSelect = document.getElementById('voice');
+    <script type='text/javascript'>
+        function init() {
+          var spinner = document.querySelector('#qtspinner');
+          var canvas = document.querySelector('#qtcanvas');
+          var status = document.querySelector('#qtstatus')
 
-function loadVoices() {
- var voices = speechSynthesis.getVoices();
- voices.forEach(function(voice, i) {
- var option = document.createElement('option');
- option.value = voice.name;
- option.innerHTML = voice.name;
- voiceSelect.appendChild(option);
- });
-}
-loadVoices();
-window.speechSynthesis.onvoiceschanged = function(e) {
- loadVoices();
-};
-
-function speak(text) {
- var msg = new SpeechSynthesisUtterance();
- msg.text = text;
- if (voiceSelect.value) {
- msg.voice = speechSynthesis.getVoices()
-.filter(function(voice) {
- return voice.name == voiceSelect.value;
- })[0];
- }
- window.speechSynthesis.speak(msg);
-}
-
-button.addEventListener('click', function(e) {
- if (speechMsgInput.value.length > 0) {
- speak(speechMsgInput.value);
- }
-});
-</script>
-<style>
-*, *:before, *:after { box-sizing: border-box; }
-html { font-family: 'Open Sans', sans-serif; font-size:
-100%; }
-#page-wrapper { width: 640px; background: #ffffff;
-padding: 16px; margin: 32px auto; border-top: 5px solid
-#9d9d9d; box-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-h2 { margin-top: 0; }
-
-#msg { font-size: 14px; line-height: 22px; }
-#msg.not-supported strong { color: #cc0000; }
-#msg > span { font-size: 24px; vertical-align: bottom; }
-#msg > span.ok { color: #00ff00; }
-#msg > span.notok { color: #ff0000; }
-#voice { margin: 0 70px 0 -70px; vertical-align: super; }
-
-input[type="text"] { width: 100%; padding: 8px;
-font-size: 19px;
-border-radius: 3px; border: 1px solid #d9d9d9;
-box-shadow: 0 2px 3px rgba(0,0,0,0.1) inset; }
-label { display: inline-block; float: left; width: 150px; }
-.option { margin: 16px 0; }
-
-button { display: inline-block; border-radius: 3px;
-border: none; font-size: 14px; padding: 8px 12px;
-background: #dcdcdc;
-border-bottom: 2px solid #9d9d9d; color: #000000;
--webkit-font-smoothing: antialiased; font-weight: bold;
-margin: 0; width: 20%; text-align: center; }
-button:hover, button:focus { opacity: 0.75; cursor:
-pointer; }
-button:active { opacity: 1; box-shadow: 0 -3px 10px
-rgba(0, 0, 0, 0.1) inset; }
-</style>
-</head>
-<body>
-
-<link href="https://fonts.googleapis.com/css?family=Open+
-Sans&display=swap" rel="stylesheet">
-<div id="page-wrapper">
- <h2>Introducing HTML5 Speech API: Reading Text back as
-Speech</h2>
- <p id="msg"></p>
- <input type="text" name="speech-msg" id="speech-msg">
- <div class="option">
- <label for="voice">Voice</label>
- <select name="voice" id="voice"></select>
- <button id="speak">Speak</button>
- </div>
-</div>
-
-</body>
+          var qtLoader = QtLoader({
+              canvasElements : [canvas],
+              showLoader: function(loaderStatus) {
+                  spinner.style.display = 'block';
+                  canvas.style.display = 'none';
+                  status.innerHTML = loaderStatus + "...";
+              },
+              showError: function(errorText) {
+                  status.innerHTML = errorText;
+                  spinner.style.display = 'block';
+                  canvas.style.display = 'none';
+              },
+              showExit: function() {
+                  status.innerHTML = "Application exit";
+                  if (qtLoader.exitCode !== undefined)
+                      status.innerHTML += " with code " + qtLoader.exitCode;
+                  if (qtLoader.exitText !== undefined)
+                      status.innerHTML += " (" + qtLoader.exitText + ")";
+                  spinner.style.display = 'block';
+                  canvas.style.display = 'none';
+              },
+              showCanvas: function() {
+                  spinner.style.display = 'none';
+                  canvas.style.display = 'block';
+              },
+          });
+          qtLoader.loadEmscriptenModule("calculator");
+      }
+    </script>
+    <script type="text/javascript" src="qtloader.js"></script>
+  </body>
 </html>
