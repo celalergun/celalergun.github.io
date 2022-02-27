@@ -43600,7 +43600,7 @@ async function predict11(image, config3, idx, count2) {
       const gender = await genderT.data();
       const confidence = Math.trunc(200 * Math.abs(gender[0] - 0.5)) / 100;
       if (confidence > (((_b3 = config3.face.description) == null ? void 0 : _b3.minConfidence) || 0)) {
-        obj.gender = gender[0] <= 0.5 ? "female" : "male";
+        obj.gender = gender[0] <= 0.5 ? "Kadın" : "Erkek";
         obj.genderScore = Math.min(0.99, confidence);
       }
       const argmax = Hu(resT.find((t) => t.shape[1] === 100), 1);
