@@ -22,7 +22,7 @@
 
 // @ts-nocheck // typescript checks disabled as this is pure javascript
 
-import Human from 'https://cdnjs.cloudflare.com/ajax/libs/human/2.1.5/human.js'; // equivalent of @vladmandic/human
+import Human from './dist/human.esm.js'; // equivalent of @vladmandic/human
 import Menu from './helpers/menu.js';
 import GLBench from './helpers/gl-bench.js';
 import webRTC from './helpers/webrtc.js';
