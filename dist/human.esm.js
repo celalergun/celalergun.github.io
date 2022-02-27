@@ -38896,7 +38896,7 @@ async function predict(image, config3, idx, count2) {
     if ((_a3 = config3.face["gear"]) == null ? void 0 : _a3.enabled)
       [t.age, t.gender, t.race] = model.execute(t.resize, ["age_output", "gender_output", "race_output"]);
     const gender = await t.gender.data();
-    obj.gender = gender[0] > gender[1] ? "male" : "female";
+    obj.gender = gender[0] > gender[1] ? "Erkek" : "Kadın";
     obj.genderScore = Math.round(100 * (gender[0] > gender[1] ? gender[0] : gender[1])) / 100;
     const race = await t.race.data();
     for (let i = 0; i < race.length; i++) {
@@ -39028,7 +39028,7 @@ async function predict3(image, config3, idx, count2) {
     if (config3.face["ssrnet"].enabled)
       t.gender = model3.execute(t.enhance);
     const data = await t.gender.data();
-    obj.gender = data[0] > data[1] ? "female" : "male";
+    obj.gender = data[0] > data[1] ? "Kadın" : "Erkek";
     obj.genderScore = data[0] > data[1] ? Math.trunc(100 * data[0]) / 100 : Math.trunc(100 * data[1]) / 100;
     Object.keys(t).forEach((tensor) => Re(t[tensor]));
     last4[idx] = obj;
@@ -49598,21 +49598,21 @@ var face2 = (res) => {
       const zDiff = (res[i].mesh[33][2] || 0) - (res[i].mesh[263][2] || 0);
       const xDiff = res[i].mesh[33][0] - res[i].mesh[263][0];
       if (Math.abs(zDiff / xDiff) <= 0.15)
-        gestures.push({ face: i, gesture: "facing center" });
+        gestures.push({ face: i, gesture: "ortaya bakıyor" });
       else
-        gestures.push({ face: i, gesture: `facing ${zDiff < 0 ? "left" : "right"}` });
+        gestures.push({ face: i, gesture: `Yön ${zDiff < 0 ? "sola" : "sağa"}` });
       const openLeft = Math.abs(res[i].mesh[374][1] - res[i].mesh[386][1]) / Math.abs(res[i].mesh[443][1] - res[i].mesh[450][1]);
       if (openLeft < 0.2)
-        gestures.push({ face: i, gesture: "blink left eye" });
+        gestures.push({ face: i, gesture: "sol gözünü kırptı" });
       const openRight = Math.abs(res[i].mesh[145][1] - res[i].mesh[159][1]) / Math.abs(res[i].mesh[223][1] - res[i].mesh[230][1]);
       if (openRight < 0.2)
-        gestures.push({ face: i, gesture: "blink right eye" });
+        gestures.push({ face: i, gesture: "sağ gözünü kırptı" });
       const mouthOpen = Math.min(100, 500 * Math.abs(res[i].mesh[13][1] - res[i].mesh[14][1]) / Math.abs(res[i].mesh[10][1] - res[i].mesh[152][1]));
       if (mouthOpen > 10)
-        gestures.push({ face: i, gesture: `mouth ${Math.trunc(mouthOpen)}% open` });
+        gestures.push({ face: i, gesture: `ağzı ${Math.trunc(mouthOpen)}% açık` });
       const chinDepth = res[i].mesh[152][2] || 0;
       if (Math.abs(chinDepth) > 10)
-        gestures.push({ face: i, gesture: `head ${chinDepth < 0 ? "up" : "down"}` });
+        gestures.push({ face: i, gesture: `kafası ${chinDepth < 0 ? "yukarı" : "aşağı"}` });
     }
   }
   return gestures;
