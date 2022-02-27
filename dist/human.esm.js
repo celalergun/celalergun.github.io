@@ -48939,17 +48939,17 @@ async function face(inCanvas2, result, drawOptions) {
       rect(ctx, f.box[0], f.box[1], f.box[2], f.box[3], localOptions);
     if (localOptions.drawLabels) {
       const labels2 = [];
-      labels2.push(`face: ${Math.trunc(100 * f.score)}%`);
+      labels2.push(`Yüz: ${Math.trunc(100 * f.score)}%`);
       if (f.genderScore)
         labels2.push(`${f.gender || ""} ${Math.trunc(100 * f.genderScore)}%`);
       if (f.age)
-        labels2.push(`age: ${f.age || ""}`);
+        labels2.push(`Yaş: ${f.age || ""}`);
       if (f.iris)
-        labels2.push(`distance: ${f.iris}`);
+        labels2.push(`Mesafe: ${f.iris}`);
       if (f.real)
-        labels2.push(`real: ${Math.trunc(100 * f.real)}%`);
+        labels2.push(`Gerçek: ${Math.trunc(100 * f.real)}%`);
       if (f.live)
-        labels2.push(`live: ${Math.trunc(100 * f.live)}%`);
+        labels2.push(`Canlı: ${Math.trunc(100 * f.live)}%`);
       if (f.emotion && f.emotion.length > 0) {
         const emotion = f.emotion.map((a) => `${Math.trunc(100 * a.score)}% ${a.emotion}`);
         if (emotion.length > 3)
@@ -48958,9 +48958,9 @@ async function face(inCanvas2, result, drawOptions) {
       }
       if (f.rotation && f.rotation.angle && f.rotation.gaze) {
         if (f.rotation.angle.roll)
-          labels2.push(`roll: ${rad2deg(f.rotation.angle.roll)}\xB0 yaw:${rad2deg(f.rotation.angle.yaw)}\xB0 pitch:${rad2deg(f.rotation.angle.pitch)}\xB0`);
+          labels2.push(`Açı: ${rad2deg(f.rotation.angle.roll)}\xB0 yaw:${rad2deg(f.rotation.angle.yaw)}\xB0 pitch:${rad2deg(f.rotation.angle.pitch)}\xB0`);
         if (f.rotation.gaze.bearing)
-          labels2.push(`gaze: ${rad2deg(f.rotation.gaze.bearing)}\xB0`);
+          labels2.push(`Bakış: ${rad2deg(f.rotation.gaze.bearing)}\xB0`);
       }
       if (labels2.length === 0)
         labels2.push("face");
